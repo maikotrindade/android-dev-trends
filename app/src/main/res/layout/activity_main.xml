@@ -12,7 +12,10 @@
     tools:context="br.com.monitoratec.app.MainActivity">
 
     <TextView
+        android:text="Status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/txtStatus" />
 </RelativeLayout>
