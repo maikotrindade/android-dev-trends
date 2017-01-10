@@ -1,10 +1,16 @@
 package br.com.monitoratec.app;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
@@ -19,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     TextView txtStatus;
+    ImageView imgView;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -29,9 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
         //binding
         txtStatus = (TextView) this.findViewById(R.id.txtStatus);
+        imgView = (ImageView) this.findViewById(R.id.ivGitHub);
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .create();
 
         final Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(GitHubStatusApi.BASE_URL)
                 .build();
 
@@ -63,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateScreen(Status status) {
-
-        this.txtStatus.setText(status.status.name());
+        int color = ContextCompat.getColor(MainActivity.this, status.status.getColorId());
+        txtStatus.setText(status.status.name());
+        txtStatus.setTextColor(color);
+        DrawableCompat.setTint(imgView.getDrawable(), color);
     }
 
 }

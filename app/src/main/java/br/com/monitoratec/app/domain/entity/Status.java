@@ -4,6 +4,10 @@ import android.graphics.Color;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
+import br.com.monitoratec.app.R;
+
 /**
  * Entidade da API GitHub Status.
  *
@@ -14,16 +18,16 @@ import com.google.gson.annotations.SerializedName;
 public class Status {
     public Type status;
     public String body;
-    public String created_on;
+    public Date created_on;
 
     public enum Type{
 
         @SerializedName("good")
-        GOOD(Color.green(1)),
+        GOOD(R.color.colorGood),
         @SerializedName("minor")
-        MINOR(Color.green(1)),
+        MINOR(R.color.colorMinor),
         @SerializedName("major")
-        MAJOR(Color.green(1));
+        MAJOR(R.color.colorMajor);
 
         private int colorId;
 
