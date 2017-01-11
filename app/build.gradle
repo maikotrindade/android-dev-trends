@@ -50,5 +50,9 @@ dependencies {
 
     compile "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitLibVersion}"
+
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
 
 }
