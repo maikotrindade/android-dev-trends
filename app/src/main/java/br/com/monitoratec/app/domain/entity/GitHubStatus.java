@@ -9,13 +9,13 @@ import java.util.Date;
 import br.com.monitoratec.app.R;
 
 /**
- * Entidade da API GitHub Status.
+ * Entidade da API GitHub GitHubStatus.
  *
  * @see <a href="https://status.github.com/api/last-message.json">Last Message</a>
  *
  * Created by falvojr on 1/9/17.
  */
-public class Status {
+public class GitHubStatus {
     public Type status;
     public String body;
     public Date created_on;
