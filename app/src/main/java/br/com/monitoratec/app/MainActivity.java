@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
+
+import javax.inject.Inject;
 
 import br.com.monitoratec.app.domain.GitHubAPI;
 import br.com.monitoratec.app.domain.GitHubStatusAPI;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private TextView mTxtStatus;
     private TextInputLayout mTextInputUsername;
@@ -43,12 +44,20 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.ivGitHub)
     public ImageView mImgView;
 
+    @Inject
+    GitHubStatusAPI statusApiImpl;
+
+    @Inject
+    GitHubAPI gitHubAPI;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getAppApplication().getDaggerDiComponent().inject(this);
 
         ButterKnife.bind(this);
 
@@ -79,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 final String password = mTextInputPassword.getEditText().getText().toString();
                 String credentials = Credentials.basic(username, password);
 
-                GitHubAPI api = GitHubAPI.RETROFIT.create(GitHubAPI.class);
-                api.basicAuth(credentials).enqueue(new Callback<User>() {
+                gitHubAPI.basicAuth(credentials).enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
@@ -100,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        GitHubStatusAPI statusApiImpl = GitHubStatusAPI.RETROFIT.create(GitHubStatusAPI.class);
 
 //        statusApiImpl.lastMessage().enqueue(new Callback<GitHubStatus>() {
 //            @Override
