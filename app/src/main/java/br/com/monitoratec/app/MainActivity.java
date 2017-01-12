@@ -8,7 +8,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,18 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+
 import br.com.monitoratec.app.domain.GitHubAPI;
 import br.com.monitoratec.app.domain.GitHubStatusAPI;
 import br.com.monitoratec.app.domain.entity.GitHubStatus;
 import br.com.monitoratec.app.domain.entity.User;
-import br.com.monitoratec.app.util.BaseSubscriber;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -60,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mTxtStatus = (TextView) this.findViewById(R.id.txtStatus);
         mTextInputUsername = (TextInputLayout) this.findViewById(R.id.tilUsername);
         mTextInputPassword = (TextInputLayout) this.findViewById(R.id.tilPassword);
+
+        
         mLogInButton = (Button) this.findViewById(R.id.loginButton);
         mLogInButton.setOnClickListener(view -> {
             boolean valid = true;
@@ -148,6 +149,15 @@ public class MainActivity extends AppCompatActivity {
                         throwable -> {
                             Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
                         });
+
+
+        RxTextView.textChanges(mTextInputUsername.getEditText()).subscribe(charSequence -> {
+            if (charSequence.toString().length() > 20) {
+                int color = ContextCompat.getColor(MainActivity.this, R.color.colorTextRxBinding);
+                mTextInputUsername.getEditText().setTextColor(color);
+            }
+        });
+
 
     }
 
