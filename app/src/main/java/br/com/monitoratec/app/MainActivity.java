@@ -19,18 +19,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import br.com.monitoratec.app.domain.GitHubAPI;
 import br.com.monitoratec.app.domain.GitHubStatusAPI;
 import br.com.monitoratec.app.domain.entity.GitHubStatus;
 import br.com.monitoratec.app.domain.entity.User;
+import br.com.monitoratec.app.util.BaseSubscriber;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -99,28 +101,54 @@ public class MainActivity extends AppCompatActivity {
 
         GitHubStatusAPI statusApiImpl = GitHubStatusAPI.RETROFIT.create(GitHubStatusAPI.class);
 
-        statusApiImpl.lastMessage().enqueue(new Callback<GitHubStatus>() {
-            @Override
-            public void onResponse(Call<GitHubStatus> call, Response<GitHubStatus> response) {
-                if (response.isSuccessful()) {
-                    GitHubStatus status = response.body();
-                    updateScreen(status);
-                } else {
+//        statusApiImpl.lastMessage().enqueue(new Callback<GitHubStatus>() {
+//            @Override
+//            public void onResponse(Call<GitHubStatus> call, Response<GitHubStatus> response) {
+//                if (response.isSuccessful()) {
+//                    GitHubStatus status = response.body();
+//                    updateScreen(status);
+//                } else {
+//
+//                    try {
+//                        String error = response.errorBody().string();
+//                        Toast.makeText(MainActivity.this, error, Toast.LENGTH_LONG).show();
+//                    } catch (IOException e) {
+//                        Log.e(TAG, e.getMessage());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GitHubStatus> call, Throwable t) {
+//                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
 
-                    try {
-                        String error = response.errorBody().string();
-                        Toast.makeText(MainActivity.this, error, Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            }
+//        statusApiImpl.lastMessage().subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new BaseSubscriber<GitHubStatus>() {
+//                    @Override
+//                    public void onError(String message) {
+//                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onNext(GitHubStatus gitHubStatus) {
+//                        updateScreen(gitHubStatus);
+//                    }
+//                });
 
-            @Override
-            public void onFailure(Call<GitHubStatus> call, Throwable t) {
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+
+        statusApiImpl.lastMessage().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(gitHubStatus -> {
+                            updateScreen(gitHubStatus);
+                        }
+                        ,
+                        throwable -> {
+                            Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+                        });
+
     }
 
     private void updateScreen(GitHubStatus status) {

@@ -45,14 +45,17 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:${retrofitLibVersion}"
     compile "com.squareup.retrofit2:converter-gson:${retrofitLibVersion}"
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitLibVersion}"
 
     compile "com.android.support:design:${supportLibVersion}"
 
     compile "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
-    compile "com.squareup.retrofit2:adapter-rxjava:${retrofitLibVersion}"
 
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
+
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
 }
