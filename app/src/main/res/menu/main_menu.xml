@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/notifyId"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        app:showAsAction="always"
-        android:title="Notify" />
+        android:id="@+id/actionCall"
+        android:icon="@drawable/ic_call"
+        android:title="@string/txt_call"
+        app:showAsAction="always" />
 </menu>

@@ -1,4 +1,4 @@
-package br.com.monitoratec.app.dagger.module;
+package br.com.monitoratec.app.dagger.module.infraestructure;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,8 +6,9 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import br.com.monitoratec.app.domain.GitHubAPI;
-import br.com.monitoratec.app.domain.GitHubStatusAPI;
+import br.com.monitoratec.app.infraestructure.storage.service.GitHubOAuthService;
+import br.com.monitoratec.app.infraestructure.storage.service.GitHubService;
+import br.com.monitoratec.app.infraestructure.storage.service.GitHubStatusService;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -15,14 +16,14 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by trindade on 12/01/17.
+ * Created by falvojr on 1/12/17.
  */
-
 @Module
 public class NetworkModule {
 
     static final String RETROFIT_GITHUB = "GitHub";
     static final String RETROFIT_GITHUB_STATUS = "GitHubStatus";
+    static final String RETROFIT_GITHUB_OAUTH = "GitHubOAuth";
 
     @Provides
     @Singleton
@@ -49,8 +50,7 @@ public class NetworkModule {
     @Named(RETROFIT_GITHUB)
     Retrofit providesRetrofitGitHub(GsonConverterFactory gsonFactory,
                                     RxJavaCallAdapterFactory rxFactory) {
-        return buildRetrofit(gsonFactory, rxFactory,
-                GitHubAPI.BASE_URL);
+        return buildRetrofit(gsonFactory, rxFactory, GitHubService.BASE_URL);
     }
 
     @Provides
@@ -58,8 +58,15 @@ public class NetworkModule {
     @Named(RETROFIT_GITHUB_STATUS)
     Retrofit providesRetrofitGitHubStatus(GsonConverterFactory gsonFactory,
                                           RxJavaCallAdapterFactory rxFactory) {
-        return buildRetrofit(gsonFactory, rxFactory,
-                GitHubStatusAPI.BASE_URL);
+        return buildRetrofit(gsonFactory, rxFactory, GitHubStatusService.BASE_URL);
+    }
+
+    @Provides
+    @Singleton
+    @Named(RETROFIT_GITHUB_OAUTH)
+    Retrofit providesRetrofitGitHubOAuth(GsonConverterFactory gsonFactory,
+                                         RxJavaCallAdapterFactory rxFactory) {
+        return buildRetrofit(gsonFactory, rxFactory, GitHubOAuthService.BASE_URL);
     }
 
     private Retrofit buildRetrofit(GsonConverterFactory converterFactory,
@@ -71,5 +78,4 @@ public class NetworkModule {
                 .addCallAdapterFactory(callAdapterFactory)
                 .build();
     }
-
 }
