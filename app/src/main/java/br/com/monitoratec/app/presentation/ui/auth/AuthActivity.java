@@ -1,7 +1,6 @@
 package br.com.monitoratec.app.presentation.ui.auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -19,14 +18,14 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import br.com.monitoratec.app.presentation.base.BaseActivity;
 import br.com.monitoratec.app.R;
 import br.com.monitoratec.app.domain.entity.Status;
 import br.com.monitoratec.app.domain.entity.User;
 import br.com.monitoratec.app.infraestructure.storage.service.GitHubOAuthService;
+import br.com.monitoratec.app.presentation.base.BaseActivity;
 import br.com.monitoratec.app.presentation.helper.AppHelper;
+import br.com.monitoratec.app.presentation.ui.followers.FollowersListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,7 +41,6 @@ public class AuthActivity extends BaseActivity implements AuthContract.View {
     @BindView(R.id.tilPassword) TextInputLayout mLayoutTxtPassword;
     @BindView(R.id.btOAuth) Button mBtnOAuth;
 
-    @Inject @Named("secret") SharedPreferences mSharedPrefs;
     @Inject AppHelper mAppHelper;
     @Inject AuthContract.Presenter mPresenter;
 
@@ -158,9 +156,8 @@ public class AuthActivity extends BaseActivity implements AuthContract.View {
 
     @Override
     public void onAuthSuccess(String credential, User user) {
-        String credentialKey = getString(R.string.sp_credential_key);
-        mSharedPrefs.edit().putString(credentialKey, credential).apply();
-        Snackbar.make(mImgGitHub, credential, Snackbar.LENGTH_LONG).show();
+        mPresenter.saveUser(credential, user.login);
+        startActivity(new Intent(AuthActivity.this, FollowersListActivity.class));
     }
 
     @Override

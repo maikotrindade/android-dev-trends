@@ -6,6 +6,8 @@ import br.com.monitoratec.app.domain.repository.GitHubRepository;
 import br.com.monitoratec.app.domain.repository.GitHubStatusRepository;
 import br.com.monitoratec.app.presentation.ui.auth.AuthContract;
 import br.com.monitoratec.app.presentation.ui.auth.AuthPresenter;
+import br.com.monitoratec.app.presentation.ui.followers.FollowerListContract;
+import br.com.monitoratec.app.presentation.ui.followers.FollowerListPresenter;
 import dagger.Module;
 import dagger.Provides;
 
@@ -24,5 +26,12 @@ public class PresenterModule {
         return new AuthPresenter(gitHubRepository,
                 gitHubStatusRepository,
                 gitHubOAuthRepository);
+    }
+
+    @PerActivity
+    @Provides
+    FollowerListContract.Presenter provideFollowersPresenter(
+            GitHubRepository gitHubRepository) {
+        return new FollowerListPresenter(gitHubRepository);
     }
 }

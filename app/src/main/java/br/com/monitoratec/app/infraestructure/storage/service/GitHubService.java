@@ -1,8 +1,12 @@
 package br.com.monitoratec.app.infraestructure.storage.service;
 
+import java.util.List;
+
+import br.com.monitoratec.app.domain.entity.Follower;
 import br.com.monitoratec.app.domain.entity.User;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**
@@ -16,4 +20,7 @@ public interface GitHubService {
 
     @GET("user")
     Observable<User> basicAuth(@Header("Authorization") String credential);
+
+    @GET("users/{username}/followers")
+    Observable<List<Follower>> getFollowers(@Path("username") String username);
 }

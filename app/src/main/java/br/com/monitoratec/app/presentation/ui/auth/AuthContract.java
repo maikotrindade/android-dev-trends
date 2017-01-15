@@ -24,5 +24,7 @@ public interface AuthContract {
         void callGetUser(String authorization);
 
         void callAccessToken(String cliId, String cliSecret, String code);
+
+        void saveUser(String credential, String username);
     }
 }

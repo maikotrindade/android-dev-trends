@@ -4,6 +4,7 @@
     <!-- SharedPreference Keys -->
     <string name="sp_file">br.com.monitoratec.app.FILE_PREFERENCES</string>
     <string name="sp_credential_key">CREDENTIAL_KEY</string>
+    <string name="sp_username_key">USERNAME_KEY</string>
 
     <!-- OAuth strings -->
     <string name="oauth_client_id">10be4336e6501c178325</string>

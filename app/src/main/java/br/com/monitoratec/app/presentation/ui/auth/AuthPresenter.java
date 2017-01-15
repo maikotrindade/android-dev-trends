@@ -1,5 +1,10 @@
 package br.com.monitoratec.app.presentation.ui.auth;
 
+import android.content.SharedPreferences;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import br.com.monitoratec.app.domain.entity.Status;
 import br.com.monitoratec.app.domain.repository.GitHubOAuthRepository;
 import br.com.monitoratec.app.domain.repository.GitHubRepository;
@@ -15,6 +20,10 @@ public class AuthPresenter implements AuthContract.Presenter {
     private GitHubRepository mGitHubRepository;
     private GitHubStatusRepository mGitHubStatusRepository;
     private GitHubOAuthRepository mGitHubOAuthRepository;
+
+    @Inject
+    @Named("secret")
+    SharedPreferences mSharedPrefs;
 
     public AuthPresenter(GitHubRepository gitHubRepository,
                          GitHubStatusRepository gitHubStatusRepository,
@@ -59,5 +68,13 @@ public class AuthPresenter implements AuthContract.Presenter {
                 }, error -> {
                     mView.showError(error.getMessage());
                 });
+    }
+
+    @Override
+    public void saveUser(String credential, String username) {
+        String credentialKey = "CREDENTIAL_KEY";
+        mSharedPrefs.edit().putString(credentialKey, credential).apply();
+        String usernameKey = "USERNAME_KEY";
+        mSharedPrefs.edit().putString(usernameKey, username).apply();
     }
 }
